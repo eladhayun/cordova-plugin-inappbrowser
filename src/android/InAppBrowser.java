@@ -162,7 +162,7 @@ public class InAppBrowser extends CordovaPlugin {
                         {
                             try {
                                 Log.d(LOG_TAG, "loading in dialer");
-                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                Intent intent = new Intent(Intent.ACTION_CALL);
                                 intent.setData(Uri.parse(url));
                                 cordova.getActivity().startActivity(intent);
                             } catch (android.content.ActivityNotFoundException e) {
@@ -770,7 +770,7 @@ public class InAppBrowser extends CordovaPlugin {
             // If dialing phone (tel:5551212)
             else if (url.startsWith(WebView.SCHEME_TEL)) {
                 try {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    Intent intent = new Intent(Intent.ACTION_CALL);
                     intent.setData(Uri.parse(url));
                     cordova.getActivity().startActivity(intent);
                 } catch (android.content.ActivityNotFoundException e) {
