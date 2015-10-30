@@ -339,15 +339,22 @@ public class InAppBrowser extends CordovaPlugin {
     public String openExternal(String url) {
         try {
             Intent intent = null;
-            intent = new Intent(Intent.ACTION_VIEW);
-            // Omitting the MIME type for file: URLs causes "No Activity found to handle Intent".
-            // Adding the MIME type to http: URLs causes them to not be handled by the downloader.
-            Uri uri = Uri.parse("tel:" + Uri.encode(url.replace("tel:", "")));
-            if ("file".equals(uri.getScheme())) {
-                intent.setDataAndType(uri, webView.getResourceApi().getMimeType(uri));
-            } else {
-                intent.setData(uri);
+
+            if ("tel".equals(uri.getScheme())) {
+                intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + Uri.encode("039546565...1")));
             }
+
+            else {
+                intent = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.parse(url);
+                if ("file".equals(uri.getScheme())) {
+                    intent.setDataAndType(uri, webView.getResourceApi().getMimeType(uri));
+                } else {
+                    intent.setData(uri);
+                }
+            }
+
             intent.putExtra(Browser.EXTRA_APPLICATION_ID, cordova.getActivity().getPackageName());
             this.cordova.getActivity().startActivity(intent);
             return "";
