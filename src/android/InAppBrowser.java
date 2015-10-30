@@ -162,7 +162,7 @@ public class InAppBrowser extends CordovaPlugin {
                         {
                             try {
                                 Log.d(LOG_TAG, "loading in dialer");
-                                Intent intent = new Intent(Intent.ACTION_CALL);
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
                                 intent.setData(Uri.parse(url));
                                 cordova.getActivity().startActivity(intent);
                             } catch (android.content.ActivityNotFoundException e) {
@@ -342,7 +342,7 @@ public class InAppBrowser extends CordovaPlugin {
             intent = new Intent(Intent.ACTION_VIEW);
             // Omitting the MIME type for file: URLs causes "No Activity found to handle Intent".
             // Adding the MIME type to http: URLs causes them to not be handled by the downloader.
-            Uri uri = Uri.parse(url);
+            Uri uri = Uri.parse(Uri.encode(url));
             if ("file".equals(uri.getScheme())) {
                 intent.setDataAndType(uri, webView.getResourceApi().getMimeType(uri));
             } else {
@@ -770,9 +770,9 @@ public class InAppBrowser extends CordovaPlugin {
             // If dialing phone (tel:5551212)
             else if (url.startsWith(WebView.SCHEME_TEL)) {
                 try {
-                  Intent intent = new Intent(Intent.ACTION_CALL);
-                  intent.setData(Uri.parse(url));
-                  cordova.getActivity().startActivity(intent);
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse(url));
+                    cordova.getActivity().startActivity(intent);
                 } catch (android.content.ActivityNotFoundException e) {
                     LOG.e(LOG_TAG, "Error dialing " + url + ": " + e.toString());
                 }
