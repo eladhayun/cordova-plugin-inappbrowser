@@ -343,7 +343,7 @@ public class InAppBrowser extends CordovaPlugin {
 
           if ("tel".equals(uri.getScheme())) {
               intent = new Intent(Intent.ACTION_CALL);
-              intent.setData(Uri.parse("tel:" + Uri.encode("039546565...1")));
+              intent.setData(Uri.parse("tel:" + Uri.encode(url.replace("tel:", ""))));
           }
 
           else {
