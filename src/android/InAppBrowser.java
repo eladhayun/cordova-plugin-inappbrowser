@@ -338,22 +338,22 @@ public class InAppBrowser extends CordovaPlugin {
      */
     public String openExternal(String url) {
         try {
-            Intent intent = null;
+          Intent intent = null;
+          Uri uri = Uri.parse(url);
 
-            if ("tel".equals(uri.getScheme())) {
-                intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + Uri.encode("039546565...1")));
-            }
+          if ("tel".equals(uri.getScheme())) {
+              intent = new Intent(Intent.ACTION_CALL);
+              intent.setData(Uri.parse("tel:" + Uri.encode("039546565...1")));
+          }
 
-            else {
-                intent = new Intent(Intent.ACTION_VIEW);
-                Uri uri = Uri.parse(url);
-                if ("file".equals(uri.getScheme())) {
-                    intent.setDataAndType(uri, webView.getResourceApi().getMimeType(uri));
-                } else {
-                    intent.setData(uri);
-                }
-            }
+          else {
+              intent = new Intent(Intent.ACTION_VIEW);
+              if ("file".equals(uri.getScheme())) {
+                  intent.setDataAndType(uri, webView.getResourceApi().getMimeType(uri));
+              } else {
+                  intent.setData(uri);
+              }
+          }
 
             intent.putExtra(Browser.EXTRA_APPLICATION_ID, cordova.getActivity().getPackageName());
             this.cordova.getActivity().startActivity(intent);
