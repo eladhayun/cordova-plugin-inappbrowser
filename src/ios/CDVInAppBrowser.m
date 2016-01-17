@@ -87,7 +87,11 @@
 #else
         NSURL* baseUrl = [self.webView.request URL];
 #endif
-        NSURL* absoluteUrl = [[NSURL URLWithString:url relativeToURL:baseUrl] absoluteURL];
+        NSString* urlWithoutSchema = [url stringByReplacingOccurrencesOfString:@"tel:" withString:@""];
+        NSString* escapedURL = [urlWithoutSchema stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+        NSString* encodedURL = [NSString stringWithFormat:@"%@%@", @"tel:", escapedURL];
+
+        NSURL* absoluteUrl = [[NSURL URLWithString:encodedURL relativeToURL:baseUrl] absoluteURL];
 
         if ([self isSystemUrl:absoluteUrl]) {
             target = kInAppBrowserTargetSystem;
@@ -470,7 +474,7 @@
 #else
         _webViewDelegate = [[CDVWebViewDelegate alloc] initWithDelegate:self];
 #endif
-        
+
         [self createViews];
     }
 
@@ -1019,4 +1023,3 @@
 
 
 @end
-
