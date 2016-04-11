@@ -87,11 +87,14 @@
 #else
         NSURL* baseUrl = [self.webView.request URL];
 #endif
-        NSString* urlWithoutSchema = [url stringByReplacingOccurrencesOfString:@"tel:" withString:@""];
-        NSString* escapedURL = [urlWithoutSchema stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-        NSString* encodedURL = [NSString stringWithFormat:@"%@%@", @"tel:", escapedURL];
+        NSString *telScheme = @"tel:";
+        if ([url rangeOfString:telScheme].location != NSNotFound){
+            NSString* urlWithoutScheme = [url stringByReplacingOccurrencesOfString:telScheme withString:@""];
+            NSString* escapedURL = [urlWithoutScheme stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+            url = [NSString stringWithFormat:@"%@%@", telScheme, escapedURL];
+        }
 
-        NSURL* absoluteUrl = [[NSURL URLWithString:encodedURL relativeToURL:baseUrl] absoluteURL];
+        NSURL* absoluteUrl = [[NSURL URLWithString:url relativeToURL:baseUrl] absoluteURL];
 
         if ([self isSystemUrl:absoluteUrl]) {
             target = kInAppBrowserTargetSystem;
